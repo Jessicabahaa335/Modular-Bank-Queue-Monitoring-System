@@ -1,0 +1,63 @@
+`timescale 10ns / 1ns
+
+module ITIBQS_tb();
+
+wire emptyFlag, fullFlag;
+wire emptyAlarm, fullAlarm;
+wire [6:0] pCountDisplay, waitTimeDisplay_1, waitTimeDisplay_2;
+
+reg rstn;
+reg clk;
+reg frontSensorInput;
+reg backSensorInput;
+reg [2:0] tellers;
+
+initial
+begin
+    clk = 0;
+    forever #50 clk = ~clk;
+end
+
+initial begin
+    rstn = 0;
+    frontSensorInput = 1;
+    backSensorInput = 1;
+    tellers = 3'b001;
+
+    #100;
+    rstn = 1;
+
+    #100;
+
+    #100 frontSensorInput = 0;
+    #100 frontSensorInput = 1;
+
+    $stop;
+end
+
+initial
+begin
+    $display("--------------------------- Test Bench for ITIBQS --------------------------------");
+    $display("Time | rstn | frontSensor | backSensor | tellers | emptyFlag | fullFlag | emptyAlarm | fullAlarm | pCount");
+
+    $monitor(" %d   %b    %b          %b          %b       %b          %b          %b          %b          %b",
+        $time, rstn, frontSensorInput, backSensorInput, tellers,
+        emptyFlag, fullFlag, emptyAlarm, fullAlarm, pCountDisplay);
+end
+
+ITIBQS ITIBQS_testUnit (
+    .rstn(rstn),
+    .clk(clk),
+    .frontSensorInput(frontSensorInput),
+    .backSensorInput(backSensorInput),
+    .tellers(tellers),
+    .emptyFlag(emptyFlag),
+    .fullFlag(fullFlag),
+    .emptyAlarm(emptyAlarm),
+    .fullAlarm(fullAlarm),
+    .pCountDisplay(pCountDisplay),
+    .waitTimeDisplay_1(waitTimeDisplay_1),
+    .waitTimeDisplay_2(waitTimeDisplay_2)
+);
+
+endmodule
