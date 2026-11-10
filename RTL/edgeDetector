@@ -1,0 +1,15 @@
+
+`timescale 10ns / 1ns
+
+module edgeDetector (sensorInput, rstn, clk, edgeEvent);
+
+input sensorInput, rstn, clk;
+output edgeEvent;
+
+wire delayInput;
+
+D_FF delayUnit (sensorInput, rstn, clk, delayInput);
+
+assign edgeEvent = delayInput & ~sensorInput;
+
+endmodule
