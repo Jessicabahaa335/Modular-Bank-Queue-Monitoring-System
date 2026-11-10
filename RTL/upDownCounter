@@ -1,0 +1,32 @@
+
+`timescale 10ns / 1ns
+
+module upDownCounter (rstn, clk, enable, upDown, pCount);
+
+parameter counterwidth = 3;
+
+input rstn, clk;
+input enable;
+input upDown;
+
+output reg [counterwidth-1:0] pCount;
+
+always @(posedge clk, negedge rstn)
+begin
+    if (~rstn)
+        pCount <= 0;
+    else
+    begin
+        if (enable)
+        begin
+            if (upDown)
+                pCount <= pCount + 1;
+            else
+                pCount <= pCount - 1;
+        end
+        else
+            pCount <= pCount;
+    end
+end
+
+endmodule
